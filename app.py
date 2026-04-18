@@ -7,7 +7,7 @@ from flask_wtf import FlaskForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.fields import DateTimeLocalField
-from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
@@ -70,6 +70,10 @@ class AssignmentForm(FlaskForm):
     due_at = DateTimeLocalField("Due date & time", format="%Y-%m-%dT%H:%M", validators=[DataRequired()])
     submit = SubmitField("Save assignment")
 
+    def validate_due_at(self, due_at):
+        if due_at and due_at.data < datetime.now():
+            raise ValidationError("Due date cannot be set to the past")
+
 
 def to_utc(dt_local_naive: datetime) -> datetime:
     local_ts = dt_local_naive.timestamp()
@@ -96,7 +100,7 @@ def dashboard():
         )
         db.session.add(assignment)
         db.session.commit()
-        flash("✅ Assignment saved successfully!", "success")
+        flash("Assignment saved successfully!", "success")
         return redirect(url_for("dashboard"))
 
     assignments = (
