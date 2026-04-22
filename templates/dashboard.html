@@ -48,7 +48,6 @@
                 <tr>
                   <th>Priority</th>
                   <th>Title</th>
-                  <th class="text-nowrap">Created (UTC)</th>
                   <th class="text-nowrap">Due (UTC)</th>
                 </tr>
               </thead>
@@ -71,12 +70,10 @@
 
                     {% if a.completed %}
                       <td class="text-muted"><del>{{ a.title }}</del></td>
-                      <td class="text-nowrap; text-muted"><del>{{ a.created_at.strftime("%Y-%m-%d %H:%M") }}</del></td>
                       <td class="text-nowrap; text-muted"><del>{{ a.due_at.strftime("%Y-%m-%d %H:%M") }}</del></td>
 
                     {% else %}
                       <td class="fw-semibold">{{ a.title }}</td>
-                      <td class="text-nowrap">{{ a.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
                       <td class="text-nowrap; fw-semibold">{{ a.due_at.strftime("%Y-%m-%d %H:%M") }}</td>
 
                     {% endif %}
